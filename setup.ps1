@@ -78,12 +78,24 @@ Write-Host "▶ " -ForegroundColor Blue -NoNewline
 Write-Host "正在启动配置向导..."
 Write-Host ""
 
-# 将 Windows 路径转换为 Unix 路径（如果是 Git Bash）
-$unixPath = $tmpScript -replace '\\', '/' -replace '^(\w):', '/$1'
-$unixPath = $unixPath.Substring(0,1) + $unixPath.Substring(1,1).ToLower() + $unixPath.Substring(2)
+# 检测是 WSL 还是 Git Bash
+$isWSL = $bashExe -like "*System32*" -or $bashExe -like "*system32*"
 
-# 启动 bash 脚本
-& $bashExe -l -c "bash '$unixPath'"
+if ($isWSL) {
+    # WSL: 使用 wslpath 转换路径
+    $unixPath = & $bashExe -c "wslpath '$($tmpScript -replace '\\', '\\')'" 2>$null
+    if (-not $unixPath) {
+        # 如果 wslpath 失败，手动转换为 /mnt/c/... 格式
+        $unixPath = $tmpScript -replace '\\', '/' -replace '^(\w):', '/mnt/$1'
+        $unixPath = $unixPath.Substring(0,5) + $unixPath.Substring(5,1).ToLower() + $unixPath.Substring(6)
+    }
+    & $bashExe -c "bash '$unixPath'"
+} else {
+    # Git Bash: 转换为 /c/... 格式
+    $unixPath = $tmpScript -replace '\\', '/' -replace '^(\w):', '/$1'
+    $unixPath = $unixPath.Substring(0,1) + $unixPath.Substring(1,1).ToLower() + $unixPath.Substring(2)
+    & $bashExe -l -c "bash '$unixPath'"
+}
 
 # 清理临时文件
 Remove-Item $tmpScript -Force -ErrorAction SilentlyContinue
