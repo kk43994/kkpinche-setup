@@ -2,10 +2,10 @@
 # KKpinche API 多模型配置向导 for Clawdbot/Moltbot/OpenClaw
 #
 # 一键运行（复制粘贴到终端）:
-#   curl -fsSL https://raw.githubusercontent.com/kk43994/kkpinche-setup/main/setup.sh -o /tmp/claw.sh && bash /tmp/claw.sh
+#   curl -fsSL https://raw.githubusercontent.com/kk43994/kkpinche-setup/master/setup.sh -o /tmp/claw.sh && bash /tmp/claw.sh
 #
 # 使用 wget（容器/Linux 备选）:
-#   wget -qO /tmp/claw.sh https://raw.githubusercontent.com/kk43994/kkpinche-setup/main/setup.sh && bash /tmp/claw.sh
+#   wget -qO /tmp/claw.sh https://raw.githubusercontent.com/kk43994/kkpinche-setup/master/setup.sh && bash /tmp/claw.sh
 
 # 如果是 macOS 且用 bash 3.x 运行，自动切换到 zsh
 if [ "$(uname)" = "Darwin" ] && [ -n "$BASH_VERSION" ]; then
