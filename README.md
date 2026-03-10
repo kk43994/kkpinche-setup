@@ -11,13 +11,13 @@
 ## 快速开始
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/YOUR_USERNAME/kkpinche-setup/main/setup.sh -o /tmp/claw.sh && bash /tmp/claw.sh
+curl -fsSL https://raw.githubusercontent.com/kk43994/kkpinche-setup/main/setup.sh -o /tmp/claw.sh && bash /tmp/claw.sh
 ```
 
 或使用 wget：
 
 ```bash
-wget -qO /tmp/claw.sh https://raw.githubusercontent.com/YOUR_USERNAME/kkpinche-setup/main/setup.sh && bash /tmp/claw.sh
+wget -qO /tmp/claw.sh https://raw.githubusercontent.com/kk43994/kkpinche-setup/main/setup.sh && bash /tmp/claw.sh
 ```
 
 ## 加入社区
