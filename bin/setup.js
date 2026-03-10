@@ -403,7 +403,7 @@ async function generateClaudeConfig() {
 
 async function inputApiKey() {
   print.step('请输入你的 API Key');
-  console.log(`${YELLOW}(API Key 以 cr_ 开头，共 67 位，可在 https://dashboard.kkpinche.ai 获取)${NC}`);
+  console.log(`${YELLOW}(API Key 以 cr_ 开头，共 67 位，请联系微信 zkh120416890 获取)${NC}`);
   console.log('');
 
   while (true) {

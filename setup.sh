@@ -722,7 +722,7 @@ main() {
 
     # 输入 API Key
     print_step "请输入你的 API Key"
-    echo "${YELLOW}(API Key 以 cr_ 开头，共 67 位，可在 https://dashboard.kkpinche.ai 获取)${NC}"
+    echo "${YELLOW}(API Key 以 cr_ 开头，共 67 位，请联系微信 zkh120416890 获取)${NC}"
     echo ""
 
     while true; do
