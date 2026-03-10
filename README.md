@@ -10,17 +10,29 @@
 
 ## 一键安装
 
-复制以下命令到终端执行，即可自动配置 OpenClaw：
+### Linux / macOS
+
+复制以下命令到终端执行：
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/kk43994/kkpinche-setup/main/setup.sh -o /tmp/claw.sh && bash /tmp/claw.sh
 ```
 
-**或使用 wget**：
+或使用 wget：
 
 ```bash
 wget -qO /tmp/claw.sh https://raw.githubusercontent.com/kk43994/kkpinche-setup/main/setup.sh && bash /tmp/claw.sh
 ```
+
+### Windows
+
+在 **PowerShell** 中执行：
+
+```powershell
+irm https://raw.githubusercontent.com/kk43994/kkpinche-setup/main/setup.ps1 | iex
+```
+
+> 注意：需要先安装 [Git for Windows](https://git-scm.com/download/win) 或 WSL
 
 ### 安装说明
 
