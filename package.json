@@ -1,9 +1,9 @@
 {
   "name": "kkpinche-setup",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "KKpinche OpenClaw API 多模型配置向导",
   "bin": {
-    "kkpinche-setup": "./bin/setup.js"
+    "kkpinche-setup": "bin/setup.js"
   },
   "engines": {
     "node": ">=18"

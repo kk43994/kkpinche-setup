@@ -8,37 +8,21 @@
 - **Claude**: Claude 4.6 系列（Opus/Sonnet/Haiku）
 - **Google Gemini**: Gemini 2.5/3.0/3.1 系列（6个模型）
 
-## 一键安装
+## 一键配置（全平台通用）
 
-### Linux / macOS
+确保已安装 OpenClaw（`npm install -g openclaw`），然后运行：
 
-复制以下命令到终端执行：
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/kk43994/kkpinche-setup/master/setup.sh -o /tmp/claw.sh && bash /tmp/claw.sh
+```
+npx kkpinche-setup
 ```
 
-或使用 wget：
+Windows、macOS、Linux 通用，无需额外安装。
 
-```bash
-wget -qO /tmp/claw.sh https://raw.githubusercontent.com/kk43994/kkpinche-setup/master/setup.sh && bash /tmp/claw.sh
-```
+### 使用步骤
 
-### Windows
-
-在 **PowerShell** 中执行：
-
-```powershell
-irm https://raw.githubusercontent.com/kk43994/kkpinche-setup/master/setup.ps1 | iex
-```
-
-> 注意：需要先安装 [Git for Windows](https://git-scm.com/download/win) 或 WSL
-
-### 安装说明
-
-1. 运行上述命令后，脚本会自动检测 OpenClaw 安装
-2. 根据提示选择要配置的模型类型（OpenAI/Claude/Gemini）
-3. 输入你的 API Key（以 `cr_` 开头）
+1. 运行 `npx kkpinche-setup`
+2. 根据提示选择要配置的模型类型（OpenAI/Claude/Gemini，支持多选）
+3. 输入你的 API Key（以 `cr_` 开头，请联系微信 zkh120416890 获取）
 4. 选择主模型和备用模型
 5. 配置完成后可选择自动重启 OpenClaw
 
