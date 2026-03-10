@@ -1,0 +1,24 @@
+{
+  "name": "kkpinche-setup",
+  "version": "1.0.0",
+  "description": "KKpinche OpenClaw API 多模型配置向导",
+  "bin": {
+    "kkpinche-setup": "./bin/setup.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "files": [
+    "bin/"
+  ],
+  "keywords": [
+    "openclaw",
+    "clawdbot",
+    "kkpinche",
+    "api",
+    "setup",
+    "cli"
+  ],
+  "author": "",
+  "license": "MIT"
+}
