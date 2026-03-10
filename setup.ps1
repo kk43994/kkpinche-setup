@@ -30,72 +30,75 @@ try {
     exit 1
 }
 
-# 查找 bash 环境
-$bashPaths = @(
-    # Git Bash
-    "C:\Program Files\Git\bin\bash.exe",
-    "C:\Program Files (x86)\Git\bin\bash.exe",
-    # WSL
-    "$env:SystemRoot\System32\bash.exe",
-    # MSYS2
-    "C:\msys64\usr\bin\bash.exe"
-)
-
-$bashExe = $null
-
-# 优先检查 PATH 中的 bash
-$bashInPath = Get-Command bash -ErrorAction SilentlyContinue
-if ($bashInPath) {
-    $bashExe = $bashInPath.Source
+# 方式1：优先使用 WSL
+$hasWSL = Get-Command wsl.exe -ErrorAction SilentlyContinue
+if ($hasWSL) {
+    # 用 wsl wslpath 转换路径
+    $unixPath = & wsl.exe wslpath -a "$tmpScript" 2>$null
+    if ($unixPath) {
+        $unixPath = $unixPath.Trim()
+        Write-Host "✓ " -ForegroundColor Green -NoNewline
+        Write-Host "使用 WSL 运行"
+        Write-Host ""
+        Write-Host "▶ " -ForegroundColor Blue -NoNewline
+        Write-Host "正在启动配置向导..."
+        Write-Host ""
+        & wsl.exe bash "$unixPath"
+        Remove-Item $tmpScript -Force -ErrorAction SilentlyContinue
+        exit $LASTEXITCODE
+    }
 }
 
-# 如果 PATH 中没有，逐个检查已知路径
-if (-not $bashExe) {
-    foreach ($path in $bashPaths) {
-        if (Test-Path $path) {
-            $bashExe = $path
+# 方式2：使用 Git Bash
+$gitBashPaths = @(
+    "C:\Program Files\Git\bin\bash.exe",
+    "C:\Program Files (x86)\Git\bin\bash.exe"
+)
+
+$gitBash = $null
+foreach ($path in $gitBashPaths) {
+    if (Test-Path $path) {
+        $gitBash = $path
+        break
+    }
+}
+
+# 也从 PATH 中找 Git Bash（排除 system32 的 WSL bash）
+if (-not $gitBash) {
+    $allBash = Get-Command bash -All -ErrorAction SilentlyContinue
+    foreach ($b in $allBash) {
+        if ($b.Source -notlike "*System32*" -and $b.Source -notlike "*system32*") {
+            $gitBash = $b.Source
             break
         }
     }
 }
 
-if (-not $bashExe) {
-    Write-Host ""
-    Write-Host "✗ " -ForegroundColor Red -NoNewline
-    Write-Host "未找到 Bash 环境！"
-    Write-Host ""
-    Write-Host "请安装以下任一环境：" -ForegroundColor Yellow
-    Write-Host "  1) Git for Windows (推荐): https://git-scm.com/download/win"
-    Write-Host "  2) WSL: wsl --install"
-    Write-Host ""
-    exit 1
-}
-
-Write-Host "✓ " -ForegroundColor Green -NoNewline
-Write-Host "找到 Bash: $bashExe"
-Write-Host ""
-Write-Host "▶ " -ForegroundColor Blue -NoNewline
-Write-Host "正在启动配置向导..."
-Write-Host ""
-
-# 检测是 WSL 还是 Git Bash
-$isWSL = $bashExe -like "*System32*" -or $bashExe -like "*system32*"
-
-if ($isWSL) {
-    # WSL: 使用 wslpath 转换路径
-    $unixPath = & $bashExe -c "wslpath '$($tmpScript -replace '\\', '\\')'" 2>$null
-    if (-not $unixPath) {
-        # 如果 wslpath 失败，手动转换为 /mnt/c/... 格式
-        $unixPath = $tmpScript -replace '\\', '/' -replace '^(\w):', '/mnt/$1'
-        $unixPath = $unixPath.Substring(0,5) + $unixPath.Substring(5,1).ToLower() + $unixPath.Substring(6)
+if ($gitBash) {
+    # Git Bash 路径：C:\Users\... -> /c/Users/...
+    $unixPath = $tmpScript -replace '\\', '/'
+    if ($unixPath -match '^(\w):(.*)') {
+        $unixPath = '/' + $Matches[1].ToLower() + $Matches[2]
     }
-    & $bashExe -c "bash '$unixPath'"
-} else {
-    # Git Bash: 转换为 /c/... 格式
-    $unixPath = $tmpScript -replace '\\', '/' -replace '^(\w):', '/$1'
-    $unixPath = $unixPath.Substring(0,1) + $unixPath.Substring(1,1).ToLower() + $unixPath.Substring(2)
-    & $bashExe -l -c "bash '$unixPath'"
+    Write-Host "✓ " -ForegroundColor Green -NoNewline
+    Write-Host "使用 Git Bash: $gitBash"
+    Write-Host ""
+    Write-Host "▶ " -ForegroundColor Blue -NoNewline
+    Write-Host "正在启动配置向导..."
+    Write-Host ""
+    & $gitBash -l -c "bash '$unixPath'"
+    Remove-Item $tmpScript -Force -ErrorAction SilentlyContinue
+    exit $LASTEXITCODE
 }
 
-# 清理临时文件
+# 都没找到
+Write-Host ""
+Write-Host "✗ " -ForegroundColor Red -NoNewline
+Write-Host "未找到可用的 Bash 环境！"
+Write-Host ""
+Write-Host "请安装以下任一环境：" -ForegroundColor Yellow
+Write-Host "  1) Git for Windows (推荐): https://git-scm.com/download/win"
+Write-Host "  2) WSL: wsl --install"
+Write-Host ""
 Remove-Item $tmpScript -Force -ErrorAction SilentlyContinue
+exit 1
